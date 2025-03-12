@@ -44,7 +44,3 @@ This project serves as a solid foundation for understanding backend development 
 
 ## **🔗 Project Model**  
 [Click here](https://app.eraser.io/workspace/YtPqZ1VogxGy1jzIDkzj)
-
-## **🔗 Project Model**  
----
-[Click here](https://app.eraser.io/workspace/YtPqZ1VogxGy1jzIDkzj)
