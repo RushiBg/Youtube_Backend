@@ -24,5 +24,4 @@ The goal of this project is to provide a scalable and efficient backend system s
 This project serves as a solid foundation for understanding backend development in real-world applications. It demonstrates clean architecture, security best practices, and efficient database handling.
 
 ## **🔗 Project Model**  
----
 [Click here](https://app.eraser.io/workspace/YtPqZ1VogxGy1jzIDkzj)
