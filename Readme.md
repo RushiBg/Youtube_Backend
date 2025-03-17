@@ -1,11 +1,5 @@
 # **Backend for YouTube-Like Platform**  
 ---
-
-## **🚀 Overview**  
----
-# **Backend for YouTube-Like Platform**  
----
-
 ## **🚀 Overview**  
 ---
 This is a full-featured backend for a video hosting platform, built using Node.js, Express.js, MongoDB, and Mongoose. The project follows industry best practices, incorporating JWT authentication, access & refresh tokens, password hashing (bcrypt), and secure API handling.
