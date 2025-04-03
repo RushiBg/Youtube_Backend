@@ -31,10 +31,13 @@ const userSchema=new Schema({
     coverImage:{
         type:String,   // cloudinary url
     },
-    watchHistory:{
-        type:Schema.Types.ObjectId,
-        ref:"Video"
-    },
+    watchHistory:[
+        {
+            type:Schema.Types.ObjectId,
+            ref:"Video"
+        },
+    ],
+    
     password:{
         type:String,
         required:[true,"Password is required"]
@@ -44,7 +47,7 @@ const userSchema=new Schema({
     }
 },{timestamps:true})
 
-
+// Password hashing middleware
 userSchema.pre("save",async function (next) {
     if(!this.isModified("password")){
         return next()
@@ -54,10 +57,12 @@ userSchema.pre("save",async function (next) {
     next()
 })
 
+// Password comparison method
 userSchema.methods.isPasswordMatch=async function(password){
     return await bcrypt.compare(password,this.password)
 }
 
+// Token generation methods
 userSchema.methods.generateAccessToken=function(){
     return jwt.sign(
         {
