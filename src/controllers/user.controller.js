@@ -5,7 +5,7 @@ import {uploadOnCloudinary} from '../utils/cloudinary.js'
 import { ApiResponse } from '../utils/ApiResponse.js'
 import jwt from 'jsonwebtoken'
 
-const generateAccessAndRefreshToken=async(userId)=>{
+const generateAccessAndRefreshToken=async(userId)=>{ 
     try {
         const user=await User.findById(userId)
         const accessToken=user.generateAccessToken()
@@ -313,4 +313,69 @@ const updateUserCoverImage=asyncHandler(async(req,res)=>{
     )
 })
 
-export {registerUser,loginUser,logOutUser,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateUserAvatar,updateUserCoverImage}
+const getUserChannelProfile=asyncHandler(async(req,res)=>{
+    const {username}=req.params
+    if(!username?.trim()){
+        throw new ApiError(400,'Username is Missing!!')
+    }
+    const channel=await User.aggregate([
+        {
+            $match:{
+                username:username?.toLowerCase()
+            }
+        },
+        {
+            $lookup:{
+                from:"subscriptions",
+                localField:"_id",
+                foreignField:"channel",
+                as:"subscribers"
+            }
+        },
+        {
+            $lookup:{
+                from:"subscriptions",
+                localField:"_id",
+                foreignField:"subscriber ",
+                as:"subscribedTo"
+            }
+        },
+        { 
+            $addFields:{
+                subscriberCount:{$size:"$subscribers"},
+                subscribedToCount:{$size:"$subscribedTo"}, 
+                // for checking if the user is subscribed to the channel
+                // if the user is logged in and the user is in the subscribers array then true else false
+                // $in operator is used to check if the user id is in the subscribers array
+                // if it is then true else false
+                isSubscribed:{
+                    $cond:{
+                        if:{$in:["$subscribers.subscriber",req.user?._id]},
+                        then:true,
+                        else:false
+                    }
+                }
+            },
+            $project:{
+                fullName:1,
+                username:1,
+                subscriberCount:1,
+                subscribedToCount:1, 
+                isSubscribed:1,
+                email:1,
+                avatar:1,
+                coverImage:1
+            }
+        } 
+    ])
+    console.log(channel);
+    
+    if(!channel?.length){ 
+        throw new ApiError(404,'channel not found')
+    }
+    return res.status(200).json(
+        new ApiResponse(200,channel[0],'User fetched successfully')
+    ) 
+})
+
+export {registerUser,loginUser,logOutUser,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateUserAvatar,updateUserCoverImage,getUserChannelProfile}
