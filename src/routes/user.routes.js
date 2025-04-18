@@ -3,7 +3,7 @@ import { changeCurrentPassword, getCurrentUser, getUserChannelProfile, getWatchH
 import { upload } from '../middlewares/multer.middleware.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 
-const router=Router();
+const router=Router(); 
 
 router.route("/register").post(
     upload.fields([
@@ -27,7 +27,7 @@ router.route("/logout").post(verifyJWT,logOutUser)
 router.route("/refresh-token").post(refreshAccessToken)
 
 router.route("/change-password").post(verifyJWT,changeCurrentPassword); 
-router.route("/current-user").post(verifyJWT,getCurrentUser); 
+router.route("/current-user").get(verifyJWT,getCurrentUser); 
 router.route("/update-account").patch(verifyJWT,updateAccountDetails);  
 
 router.route("/avatar").patch(verifyJWT,upload.single('avatar'),updateUserAvatar);
